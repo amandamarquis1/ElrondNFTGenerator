@@ -24,7 +24,7 @@ Hi there! This NFT generator was inspired by a personal desire to create a minta
 - [ ] Create a more complicated example with layer rarity
 
 ## About @amandamarquis1
-I am a web developer for the Cryptocurrency project Nexus. In late 2021 I got into the NFT space and released collections both on the Elrond and Nexus blockchains. Below is my contact information! 
+I am a web developer for the Cryptocurrency project Nexus. In late 2021 I got into the NFT space and released collections both on the Elrond and Nexus blockchains. Below is my contact information and other NFT collection details! 
 
 - NFT
 	- [MandasNFTs.com](https://mandasnfts.com)
