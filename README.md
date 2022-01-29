@@ -8,7 +8,7 @@ You can view
 
 ## Need to Know
 - This NFT Generator **only works** with PNG's at this time.
-- The example uses layers 1000 x 1000 in size. The base layer for the NFT generated is currently hard coded to 1000 x 1000. If you download the example and test it before this is fixed, make sure you change the base layer size beforehand.
+- The example uses layers 1000 x 1000 in size. The final size of the NFT can be different from the layer sizes uploaded.
 - There is ***NO LAYER RARITY VALUE***. It randomly selects the layers with no regard to frequency, other than checking that a specific combination has been created previously or not.
 - It currently works by stacking layers in the order of which they are entered into the $variation_layers array
 - Metadata.json file is generated based on the specs for [Isengard Marketplace](https://isengard.market) mintable collections. If the file varies by marketplace, use caution if trying this code.

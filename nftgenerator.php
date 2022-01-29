@@ -1,12 +1,16 @@
 <?php
 
+  /* Desired ratio for NFT final size */ 
+  $nft_ratio['w'] = 1000;
+  $nft_ratio['h'] = 1000;
+
   /* Get all of the layer folders */
   $folders = array_filter(glob('*'), 'is_dir');
 
   /* Get & count all layers */
   $src_dirs = array();
   
-  /*TODO: Fix max_nfts logic */
+  /*TODO: Change max_nfts logic */
   $max_nfts = 1;
   foreach($folders as $dir) {
     array_push($src_dirs, glob("./" . $dir ."/*.png"));
@@ -63,11 +67,13 @@
 	    /* Make sure the current generated NFT doesn't already exist */
         if(!in_array($attributes, $generated_nfts)) {
 		  /* NFT base to combine all layers CHANGE THIS: to be the dimensions of your NFTs */
-          $new_nft = imagecreatetruecolor(1000, 1000);
+          $small_nft = imagecreatetruecolor($nft_layers[0]['w'], $nft_layers[0]['h']);
           foreach ($nft_layers as $layer){ 
-            imagecopymerge($new_nft, $layer['img'], 0, 0, 0, 0, $layer['w'], $layer['h'], 100);
+            imagecopymerge($small_nft, $layer['img'], 0, 0, 0, 0, $layer['w'], $layer['h'], 100);
             imagedestroy($layer['img']); 
-          } 
+          }
+		  $new_nft = imagecreatetruecolor($nft_ratio['w'], $nft_ratio['h']);
+		  imagecopyresized($new_nft, $small_nft, 0, 0, 0, 0, $nft_ratio['w'], $nft_ratio['h'], $nft_layers[0]['w'], $nft_layers[0]['h']);
           array_push($generated_nfts, $attributes);
           array_push($generated_metadata, 
 	  	            array("description"=>"This is a description of NFT #$current_nft in my fictional collection example!",

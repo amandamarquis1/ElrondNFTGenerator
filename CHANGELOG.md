@@ -1,6 +1,18 @@
 # Changelog
 This will be an informal change log to document features worked on at each update.
 
+## [1.0.2] 2022-01-29
+- Added:
+	- final image size support to let users choose the final resolution of the NFT
+- Removed:
+	- Hard coded layer size that limited sizing ability
+- TODO:
+	- Stress test large NFT quantities with layers for optimization
+	- Fix max_nft logic to account for different batches of combinations
+	- Create Layer Rarity functionality
+	- Make sure Metadata.json file is universal
+
+
 ## [1.0.1] 2022-01-28
 - Added:
 	- Added arrays to be able to create NFT batches to customize layers
