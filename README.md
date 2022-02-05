@@ -8,11 +8,12 @@ You can view
 
 ## Need to Know
 - This NFT Generator **only works** with PNG's at this time.
-- The example uses layers 1000 x 1000 in size. The final size of the NFT can be different from the layer sizes uploaded.
+- The example uses layers 1000 x 1000 in size. The final size of the NFT can be different from the layer sizes uploaded. Layers uploaded do not have to be 1000 x 1000.
 - There is ***NO LAYER RARITY VALUE***. It randomly selects the layers with no regard to frequency, other than checking that a specific combination has been created previously or not.
+- Layer frequency is calculated and exported in a csv file.
 - It currently works by stacking layers in the order of which they are entered into the $variation_layers array
 - Metadata.json file is generated based on the specs for [Isengard Marketplace](https://isengard.market) mintable collections. If the file varies by marketplace, use caution if trying this code.
-- Places the finished NFTs and metadata in a zipped folder.
+- Places the finished NFTs in a zipped folder. Does not zip the json or csv files. 
 - *It is not optimized to it's fullest potential and I am learning a lot as I go. Feedback and suggestions are always welcome!*
 
 ## Roadmap
@@ -20,7 +21,7 @@ You can view
 - Script
 	- [ ] Create Layer Rarity functionality
 	- [ ] Add GIF support 
-	- [ ] Make sure Metadata.json file is universal
+	- [x] Make sure Metadata.json file is universal
 	- [x] Configure folder order in case BG is not first alphabetically
 		* Layers currently entered into the $variation_layers array and will build in that order
 	- [ ] Create a UI

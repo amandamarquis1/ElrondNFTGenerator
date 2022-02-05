@@ -7,31 +7,24 @@
   /* Get all of the layer folders */
   $folders = array_filter(glob('*'), 'is_dir');
 
-  /* Get & count all layers */
+  /* Get all layers */
   $src_dirs = array();
-  
-  /*TODO: Change max_nfts logic */
-  $max_nfts = 1;
   foreach($folders as $dir) {
     array_push($src_dirs, glob("./" . $dir ."/*.png"));
-    $max_nfts *= count(glob("./" . $dir ."/*.png"));
   }
   
-  /* Layer combinations for each batch of NFTs */
+  /* CHANGE ME: Layer combinations for each batch of NFTs */
   $variation_layers = [array('Background', 'Number'), array('Background', 'Stripes', 'Letter'), array('Background', 'Number', 'Letter')];
 
   /* Count batches to be created */
   $variations = count($variation_layers);
   
-  /* number of NFTs in each batch */
-  $variation_nfts = [10, 15, 7];
+  /* CHANGE ME: Number of NFTs in each batch */
+  $variation_nfts = [15, 15, 15];
   
-  /* Total NFTs in all batches */
-  $total_nfts = array_sum($variation_nfts);
-
-  /* Verify enough layers were added to make desired number of NFTs */
-  if($max_nfts < $total_nfts) {
-	 echo "Max number of NFT's you can create is $max_nfts. You are trying to make $total_nfts. Please add more layers or lower your \$total_nfts value.";
+  /* Verify there are enough layer combinations to make NFTS TODO: Update error message */
+  if(!check_max_nfts($variation_nfts, $variation_layers, $src_dirs)) {
+	 echo "There are not enough layers available to create the number of NFTs you want to make";
   } else {
 	$current_nft = 1;  
 	mkdir("NFTGenerator");
@@ -39,6 +32,8 @@
     /* Arrays to store the generated NFTs and their metadata to ensure no duplicates */
 	$generated_nfts = array();
     $generated_metadata = array();
+	$collectRarity = array();
+	$collectFolders = array();
 	
 	/* Loop through the batches */
 	for ($batch = 0; $batch < $variations; $batch++) {
@@ -66,6 +61,16 @@
 	  
 	    /* Make sure the current generated NFT doesn't already exist */
         if(!in_array($attributes, $generated_nfts)) {
+			
+		  /* Count the frequency of the layer */
+		  foreach ($attributes as $key => $val) { 
+            if (isset($collectRarity[$val['value']]))
+              $collectRarity[$val['value']] += 1;
+            else
+              $collectRarity[$val['value']] = 1;
+              $collectFolders[$val['value']] = $val['trait_type'];
+          }
+			
 		  /* NFT base to combine all layers CHANGE THIS: to be the dimensions of your NFTs */
           $small_nft = imagecreatetruecolor($nft_layers[0]['w'], $nft_layers[0]['h']);
           foreach ($nft_layers as $layer){ 
@@ -93,10 +98,18 @@
 	}
   }
 
-  file_put_contents('./NFTGenerator/metadata.json',
+  /* Write Metadata to json file */
+  file_put_contents('./metadata.json',
                      json_encode(array("name"=>"test", "nfts"=>$generated_metadata), JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT)); 
- 
- /* Zip NFTs and metadata in folder */
+
+  /* Write layer frequency information to a csv file */
+  $rarity_to_csv = fopen('./rarities.csv', 'w');
+	 fputcsv($rarity_to_csv, array("Category", "Layer", "Count"));
+	 foreach($collectRarity as $field => $val) {
+	 fputcsv($rarity_to_csv, Array($collectFolders[$field], $field , $val));
+	 }
+
+  /* Zip NFTs and metadata in folder */
   $zip = new ZipArchive;
   if($zip -> open("NFTGenerator.zip", ZipArchive::CREATE ) === TRUE) {
 
@@ -111,4 +124,29 @@
   /* Remove unzipped folder & files */
   array_map('unlink', glob("NFTGenerator/*.*"));
   rmdir("NFTGenerator");
+
+  /* Max NFT function to check enough layers are available */
+  function check_max_nfts($variation_numbers, $layer_combos, $src_dirs) {
+	/* Total NFTs in all batches */
+    $total_nfts = array_sum($variation_numbers);
+	
+	/* Count layer combos */
+	$max_nfts = 1;
+	foreach($layer_combos as $index => $layers) {
+	  $variation_max = 1;
+	  foreach($layers as $dir) {
+        $variation_max *= count(glob("./" . $dir ."/*.png"));
+	  }
+	  if($variation_max < $variation_numbers[$index]) {
+		  return false;
+	  }
+	  $max_nfts += $variation_max;
+    }
+	if($max_nfts < $total_nfts) {
+	  return false;
+	}
+	
+	return true;	
+  }
+
 ?>

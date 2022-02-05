@@ -1,6 +1,17 @@
 # Changelog
 This will be an informal change log to document features worked on at each update.
 
+## [1.0.1] 2022-02-04
+- Added:
+	- Function to check the max nft counts for each combination
+	- Added layer frequency calculations
+	- Export layer frequencies to a csv file
+- Removed:
+	- Old max NFT method
+- TODO:
+	- Stress test large NFT quantities with layers for optimization
+	- Create Layer Rarity functionality
+
 ## [1.0.2] 2022-01-29
 - Added:
 	- final image size support to let users choose the final resolution of the NFT
