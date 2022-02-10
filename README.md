@@ -19,13 +19,13 @@ You can view
 ## Roadmap
 - [ ] Create PHP & XAMPP Download instructions for a full tutorial
 - Script
-	- [ ] Create Layer Rarity functionality
+	- [x] Create Layer Rarity functionality
 	- [ ] Add GIF support 
 	- [x] Make sure Metadata.json file is universal
 	- [x] Configure folder order in case BG is not first alphabetically
 		* Layers currently entered into the $variation_layers array and will build in that order
 	- [ ] Create a UI
-- [ ] Create a more complicated example with layer rarity
+- [x] Create a more complicated example with layer rarity
 
 ## About Amanda
 I am a web developer for the Cryptocurrency project Nexus. In late 2021 I got into the NFT space and released collections both on the Elrond and Nexus blockchains. Below is my contact information and other NFT collection details! 

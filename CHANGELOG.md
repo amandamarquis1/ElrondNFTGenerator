@@ -1,7 +1,21 @@
 # Changelog
 This will be an informal change log to document features worked on at each update.
 
-## [1.0.1] 2022-02-04
+## [1.1.0] 2022-02-09
+- Added:
+	- Config.php file to separate the changing values
+	- Added Frequency % to the exported csv
+	- Added function to check desired max appearance
+	- Removes lataer from $src_dirs when max appearance has been met 
+	- Renamed all images to include rarities
+	- Added additional images
+- Removed:
+	- Single file that included changing values by user
+- TODO: 
+	- Clean up and optimize code
+	- Stress test the optimization
+	
+## [1.0.3] 2022-02-04
 - Added:
 	- Function to check the max nft counts for each combination
 	- Added layer frequency calculations
