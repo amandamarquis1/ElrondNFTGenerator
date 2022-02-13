@@ -1,6 +1,18 @@
 # Changelog
 This will be an informal change log to document features worked on at each update.
 
+## [1.1.1] 2022-02-12
+- Added:
+	- Better optimized code
+	- Ability to choose what marketplace standard you want for metadata (currently trust and isengard)
+	- Move Metadata information into the config file
+- Removed:
+	- Unused functions
+	- Repetitve code 
+	- Hard code metadata standard
+- TODO:
+	- Add ability to generate multiple metadata standards at once
+
 ## [1.1.0] 2022-02-09
 - Added:
 	- Config.php file to separate the changing values
