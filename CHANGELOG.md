@@ -1,11 +1,23 @@
 # Changelog
 This will be an informal change log to document features worked on at each update.
 
+## [2.0.0] 2022-02-25
+- Added:
+	- Subfolder parsing for nested folders to organize batches
+	- CWD navigation to return to main code location after parse
+	- Rarity for NFTs by weight
+	- Allow for creation of a transparent copy of NFT
+- Removed:
+	- Frequency of NFT being a hard stop number
+- TODO:
+	- Readd max NFT logic down the road
+	- Add more marketplace metadata specs
 ## [1.1.1] 2022-02-12
 - Added:
 	- Better optimized code
 	- Ability to choose what marketplace standard you want for metadata (currently trust and isengard)
 	- Move Metadata information into the config file
+	- Put metadata files generated in a metadata folder
 - Removed:
 	- Unused functions
 	- Repetitve code 

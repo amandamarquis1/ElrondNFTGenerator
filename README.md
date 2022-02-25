@@ -4,7 +4,9 @@ NFT Generator for the Elrond Blockchain coded in PHP
 ## About the project
 Hi there! This NFT generator was inspired by a personal desire to create a mintable NFT collection without the hassle of creating each individual NFTs by hand. It has **VERY** basic functionality at this time. I will add features periodically (usually on the weekends) in my free time. Check out the [Roadmap](#roadmap) below for planned additions to this project! :)
 
-You can view 
+You are free to download this code and generate your NFTs directly. You will need to install a PHP server, or download PHP and run the code through task scheduler. Depending on the size of your collection, you may need to modify your php.ini file to increase the execution time of your script, as it can time out for larger collections. 
+
+If you would like assistance with generating your Elrond NFT collection to avoid the hassle of PHP, please reach out to me at one of my [Contact Information](#About Amanda) links below! I would love to work with you and your team in creating a new NFT collection :)
 
 ## Need to Know
 - This NFT Generator **only works** with PNG's at this time.
@@ -24,7 +26,6 @@ You can view
 	- [x] Make sure Metadata.json file is universal
 	- [x] Configure folder order in case BG is not first alphabetically
 		* Layers currently entered into the $variation_layers array and will build in that order
-	- [ ] Create a UI
 - [x] Create a more complicated example with layer rarity
 
 ## About Amanda

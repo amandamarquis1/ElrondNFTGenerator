@@ -1,33 +1,45 @@
 <?php
 
   require_once('./config.php');
+  $location = getcwd();
   
   /* Total NFTs in all batches */
   $total_nfts = array_sum($variation_nfts);
 
   /* Get all of the layer folders */
-  $folders = array_filter(glob('*'), 'is_dir');
+  $folders = getDirContents($location, getcwd());
 
-  /* Get all layers */
+  /* Return to main directory after identifying all files */
+  chdir($location);
+
+  /* Collect links to all png layers */
   $src_dirs = array();
+  $src_dir_rarities = array();
   foreach($folders as $dir) {
-    array_push($src_dirs, glob('./' . $dir .'/*.png'));
+	$rarity_array = array();
+	$folder_dir = glob('./' . $dir .'/*.png');
+    array_push($src_dirs, $folder_dir);
+	/* Collect all layer rarities for each folder */
+	foreach($folder_dir as $file_name) {
+		/* x100 to account for the very small percentage of large collections */
+		$layer_rarity = isset(explode('#',basename($file_name, '.png'))[1]) ? (explode('#',basename($file_name, '.png'))[1])*100 : 100 ;
+		array_push($rarity_array, $layer_rarity);
+	}
+	array_push($src_dir_rarities, $rarity_array);
   }
-  
-  /* Collect the max appearance count for the layers */
-  $layer_frequencies = calculate_frequencies($src_dirs, $total_nfts);
-  
-  /* Arrays to store the generated NFTs and their metadata to ensure no duplicates */
+
+  /* Arrays to store the generated NFTs and their metadata to ensure no duplicates and count appearances*/
   $generated_nfts = array();
   $generated_metadata = array();
   $collectRarity = array();
   $collectFolders = array();
   
-  /* Verify there are enough layer combinations to make NFTS TODO: Update error message */
-  if(check_max_nfts($variation_nfts, $total_nfts, $variation_layers)) {
-	$current_nft = 1;  
-	mkdir('NFTGenerator');
-	mkdir('Metadata');
+  /* Verify there are enough layer combinations to make NFTS TODO: Update Max NFT again */
+  $current_nft = 1;  
+  mkdir('NFTGenerator');
+  if($make_transparent_BG) {		
+     mkdir($duplicate_nft_folder);
+  }
 	
 	/* Loop through the batches of NFTs*/
 	foreach ($variation_layers as $batch_index => $batch_variations) {
@@ -37,20 +49,24 @@
 	  while($nft_in_batch < $variation_nfts[$batch_index]) {
 	
         $attributes = array();
-		
 		/* Loop through the layers for the specific NFT */ 
         foreach($batch_variations as $layer_type => $layer_category) {
 		  /* Get layers from the specific folder */
 		  $key = array_search($layer_category, $folders);
-          $image_src = $src_dirs[$key][rand(1,count($src_dirs[$key]))-1];
-		
+		  $rarity_key = getLayer($src_dir_rarities[$key]);
+          $image_src = $src_dirs[$key][$rarity_key];
       	  $trait_name = basename($image_src, '.png');
-	      array_push($attributes, array('trait_type' => substr(dirname($image_src),2), 'value' => explode('#',$trait_name)[0]));
+	      
           /* img size and dimensions */
           $img_size = getimagesize($image_src);
           $nft_layers[$layer_type]['img'] = imagecreatefrompng($image_src);
   	      $nft_layers[$layer_type]['w'] = $img_size[0];
           $nft_layers[$layer_type]['h'] = $img_size[1];
+		  
+		  if(!str_contains($image_src, 'NONE')) {
+		    array_push($attributes, array('trait_type' => explode('/', substr(dirname($image_src),2))[0], 'value' => str_replace('_', ' ', explode('#',$trait_name)[0])));
+		  }
+		 
         }
 
 	    /* Make sure the current generated NFT doesn't already exist */
@@ -64,34 +80,19 @@
               $collectRarity[$val['value']] = 1;
               $collectFolders[$val['value']] = $val['trait_type'];
 		    }
-			/* Check if a layer has reached its max appearances */
-		    if($collectRarity[$val['value']] === $layer_frequencies[$val['value']]) {
-			  $key = $val['value'];
-			  $remove_layer = './' . $collectFolders[$key] . '/' . $key . '#' . $layer_frequencies[$key] . '.png';
-		      $folder_index = array_search($collectFolders[$key], $folders);
-			  
-			  /* Remove layer if it has reached max appearances, reindex the src_dirs array */
-			  if(($remove_index = array_search($remove_layer, $src_dirs[$folder_index])) !== false) {
-				unset($src_dirs[$folder_index][$remove_index]);
-			  }
-			  $src_dirs[$folder_index] = array_values($src_dirs[$folder_index]);
-			}
           }
 
-		  /* NFT base to combine all layers */
-          $small_nft = imagecreatetruecolor($nft_layers[0]['w'], $nft_layers[0]['h']);
-          foreach ($nft_layers as $layer){
-            imagecopymerge($small_nft, $layer['img'], 0, 0, 0, 0, $layer['w'], $layer['h'], 100);
-            imagedestroy($layer['img']);
-          }
-		  $new_nft = imagecreatetruecolor($nft_ratio['w'], $nft_ratio['h']);
-		  imagecopyresized($new_nft, $small_nft, 0, 0, 0, 0, $nft_ratio['w'], $nft_ratio['h'], $nft_layers[0]['w'], $nft_layers[0]['h']);
+		  build_nft($nft_layers, $nft_ratio, 'NFTGenerator', $current_nft);
+		  
+		  /* Create a background-less duplicate for a transparent copy if desired */
+		  if($make_transparent_BG) {
+			array_shift($nft_layers);
+			build_nft($nft_layers, $nft_ratio, $duplicate_nft_folder, $current_nft);
+		  }
           array_push($generated_nfts, $attributes);
           
 		  $generated_metadata = add_metadata($generated_metadata, $attributes, $current_nft, $marketplace, $nft_description, $nft_tags);
 		  
-          imagepng($new_nft, "./NFTGenerator/$current_nft.png");
-          imagedestroy($new_nft);
 		  $current_nft++;
 		
 	    /* If NFT combo already exists, don't count this loop and try again */
@@ -101,15 +102,18 @@
 		$nft_in_batch++;
       }
 	}
-  } else {
-    exit('There are not enough layers available to create the number of NFTs you want to make');
-  }
 
   /* Write Metadata to json file */
-  file_put_contents('./Metadata/metadata.json', json_encode(array('name'=>'test', 'nfts'=>$generated_metadata), JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+  mkdir('Metadata');
+  if($marketplace === 'TrustMarket') {
+	  file_put_contents('./Metadata/metadata.json', json_encode($generated_metadata, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+	} else if ($marketplace === 'Isengard') {
+	  file_put_contents('./Metadata/metadata.json', json_encode(array("name"=>$collection_name, "nfts"=>$generated_metadata), JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+	}
+  
 
   /* Write layer frequency information to a csv file */
-  $frequency_to_csv = fopen('./Metadata/rarities.csv', 'w');
+ $frequency_to_csv = fopen('./Metadata/rarities.csv', 'w');
   fputcsv($frequency_to_csv, array('Category', 'Layer', 'Count', 'Frequency'));
   foreach($collectRarity as $field => $val) {
     fputcsv($frequency_to_csv, Array($collectFolders[$field], $field , $val, number_format(($val / $total_nfts) * 100, 2).'%'));
@@ -122,14 +126,10 @@
     while($file = readdir($dir)) {
       if(is_file('NFTGenerator/'.$file)) {
        $zip -> addFile('NFTGenerator/'.$file, $file);
-      }
+     }
     }
     $zip ->close();
   }
-  
-  /* Remove unzipped folder & files */
-  array_map('unlink', glob('NFTGenerator/*.*'));
-  rmdir('NFTGenerator');
 
   /* Max NFT function to check enough layers are available */
   function check_max_nfts($variation_numbers, $total_nfts, $layer_combos) {
@@ -151,18 +151,6 @@
 	return true;	
   }
   
-  function calculate_frequencies($src_dirs, $total_nfts) {
-	$layer_frequencies = array();
-	foreach ($src_dirs as $category) {
-	  foreach($category as $key => $layer_name) {
-		$trait_name = basename($layer_name, '.png');
-		$frequency = isset(explode('#',$trait_name)[1]) ? explode('#',$trait_name)[1] : $total_nfts;
-		$layer_frequencies[explode('#',$trait_name)[0]] = $frequency;
-	  }
-	}
-	return $layer_frequencies;
-  }
-  
   function add_metadata($generated_metadata, $attributes, $current_nft, $marketplace, $nft_description, $nft_tags) {
 	if($marketplace === 'TrustMarket') {
 	  array_push($generated_metadata, array('description'=>$nft_description, 'attributes'=>$attributes));
@@ -171,5 +159,57 @@
 	}
     return $generated_metadata;
   }
- 
+  
+  function build_nft($nft_layers, $nft_ratio, $desired_directory, $current_nft) {
+	/* NFT base to combine all layers */
+    $small_nft = imagecreatetruecolor($nft_layers[0]['w'], $nft_layers[0]['h']);
+	imagesavealpha($small_nft, true);
+    $color = imagecolorallocatealpha($small_nft, 0, 0, 0, 127);
+    imagefill($small_nft, 0, 0, $color);
+	/* Combine all layers */
+    foreach ($nft_layers as $layer){
+      imagecopy($small_nft, $layer['img'], 0, 0, 0, 0, $layer['w'], $layer['h']);
+      imagedestroy($layer['img']);
+    }
+	
+	/* Resize the image and keep transparency if desired */
+	$new_nft = imagecreatetruecolor($nft_ratio['w'], $nft_ratio['h']);
+	imagesavealpha($new_nft, true);
+    $color = imagecolorallocatealpha($new_nft, 0, 0, 0, 127);
+    imagefill($new_nft, 0, 0, $color);
+	imagecopyresampled($new_nft, $small_nft, 0, 0, 0, 0, $nft_ratio['w'], $nft_ratio['h'], $nft_layers[0]['w'], $nft_layers[0]['h']);
+	
+	imagepng($new_nft, './'.$desired_directory."/$current_nft.png");
+    imagedestroy($new_nft);
+  }
+  
+  /* Recursively navigate through the sub folders to find all folders */
+  function getDirContents($location, $dir, &$results = array()) {
+	chdir($dir);
+    $files = scandir($dir);
+
+    foreach ($files as $key => $value) {
+        $path = realpath($dir . DIRECTORY_SEPARATOR . $value);
+        if (!is_dir($path)) {
+         //   $results[] = $path;
+        } else if ($value != '.' && $value != '..') {
+            getDirContents($location, $path, $results);
+            $results[] = str_replace('\\', '/',substr($path, strlen($location)+1));
+        }
+    }
+
+    return $results;
+  }
+
+  /* Randomly select attribute to use based on rarity weight */
+  function getLayer(array $weightedValues) {
+    $rand = rand(1, array_sum($weightedValues));
+
+    foreach ($weightedValues as $key => $value) {
+      $rand -= $value;
+      if ($rand <= 0) {
+        return $key;
+      }
+    }
+  }
 ?>
