@@ -62,7 +62,7 @@ I am a web developer for the Cryptocurrency project Nexus. In late 2021 I got in
 
 ### 2. Prepping your environment
 1. Install PHP on your device. To use this code, you will need to download a PHP web server on your computer. I personally use XAMPP. I highly recommend following [THIS TUTORIAL on how to install Xampp](https://www.simplilearn.com/tutorials/php-tutorial/php-using-xampp)
-2. After installation, navigate to `htdocs/php/` and open the `php.ini` file in an editor of choice. Search for `extension=` in the file, and uncomment the `extension=gd` line by removing the `;`. If it is not in the file, paste it in on a new line.
+2. After installation, navigate to `xampp/php/` and open the `php.ini` file in an editor of choice. Search for `extension=` in the file, and uncomment the `extension=gd` line by removing the `;`. If it is not in the file, paste it in on a new line.
 3. Search for `max_execution_time=` in the file and increase the time significantly. If you are generating a large collection, you can enter 600 (seconds, which equals 10 minutes). This will prevent the script from timing out.
 4. In the `htdocs` folder, clone this repository to download the `config.php` and `nftgenerator.php` files.
 5. Open `config.php` in the editor of your choice. 
@@ -91,8 +91,11 @@ I am a web developer for the Cryptocurrency project Nexus. In late 2021 I got in
 ### 3. Running the generator
 
 1. Search for the Xampp Control panel and launch it. Under the *Actions* column, click on `Start` for Apache (like how you tested it after download in step 1).
-2. While running, in a browser, navigate to the location of your NFTGenerator file and hit enter in the browser
-  > `C:/Path/to/NFTGenerator/nftgenerator.php`
-3. If everthing was configured correctly, the page should return a blank screen. Open the NFTGenerator folder back up, and there should be a new Metadata folder, and a zipped NFTGenerator folder that contains your NFTs!
+2. Open up a browser of your choice (Chrome, Edge, Firefox, etc). 
+3. In your browser, you want to navigate to your localhost environment (the xampp server you turned on in step 1). It is launched out of the `htdocs` folder where you cloned the repository, so you won't need to add the `C:/xampp/htdocs/` portion. You are able to run the code by simply navigating to:
+  > `http://localhost/ElrondNFTGenerator/nftgenerator.php`
+4. If you have the code in a subfolder, you will add that subfolder to the URL as well. For example, if you wanted to run the `Simple Example` first to see how it worked, you would navigate to:
+  > `http://localhost/ElrondNFTGenerator/Simple%20Example/nftgenerator.php`
+5. If everthing was configured correctly, the page should return a blank screen. Open the NFTGenerator folder back up, and there should be a new Metadata folder and a zipped NFTGenerator folder that contains your NFTs!
 
-The Simple Example in this repository walks through the same steps described above :)
+I recommend taking a look at the Simple Example to see how the folders are organized in the config file, as well as how the rarities are organized on the image layers themselves. You can either replace your images directly in the Simple Example folder, or add them to the main folder as well. Both copies of the nft generator are the same, one with a filled out config file and one without :)
