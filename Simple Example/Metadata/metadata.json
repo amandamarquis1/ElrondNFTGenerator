@@ -1,0 +1,66 @@
+[
+    {
+        "description": "Here is an NFT description!",
+        "attributes": [
+            {
+                "trait_type": "Background",
+                "value": "lightGrey"
+            },
+            {
+                "trait_type": "Stripes",
+                "value": "Purple"
+            }
+        ]
+    },
+    {
+        "description": "Here is an NFT description!",
+        "attributes": [
+            {
+                "trait_type": "Background",
+                "value": "darkGrey"
+            },
+            {
+                "trait_type": "Stripes",
+                "value": "Green"
+            },
+            {
+                "trait_type": "Letter",
+                "value": "z"
+            }
+        ]
+    },
+    {
+        "description": "Here is an NFT description!",
+        "attributes": [
+            {
+                "trait_type": "Background",
+                "value": "black"
+            },
+            {
+                "trait_type": "Number",
+                "value": "10"
+            },
+            {
+                "trait_type": "Letter",
+                "value": "b"
+            }
+        ]
+    },
+    {
+        "description": "Here is an NFT description!",
+        "attributes": [
+            {
+                "trait_type": "Background",
+                "value": "black"
+            },
+            {
+                "trait_type": "Number",
+                "value": "2"
+            },
+            {
+                "trait_type": "Letter",
+                "value": "z"
+            }
+        ]
+    }
+]
