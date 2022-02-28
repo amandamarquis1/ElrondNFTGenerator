@@ -51,7 +51,7 @@ I am a web developer for the Cryptocurrency project Nexus. In late 2021 I got in
 - Say you wanted some of your NFTs to have NO background, and it be just as rare as the Night Sky. What you could do is ***create a blank layer the same size as your other layers, and name it `NONE#5.png`***. Now, lower the frequency of another background (Drop that Blue Sky down to 70%) so all of the layers still add up to 100. This will give 5% of your NFTs no background, and just skip over adding a background value to the metadata for that 5%. 
   > This feature comes in handy with special accessories or other layers, to prevent all NFTs from having them. Use it in as few or as many folders as you want for your NFT layers!
 
--The ability to have percentages between 1 and .01% are possible. When naming the image layer, please use a leading zero.
+- The ability to have percentages between 1 and .01% are possible. When naming the image layer, please use a leading zero.
   > 0.5% = `Blue_Sky#0.5.png`
   
 - Folders should be named how you want the attribute value to be named. We named all of the background files above, so we would want to put them in a subfolder named "Background". Capitalization is important. Name it exactly how you want it in the metadata.
