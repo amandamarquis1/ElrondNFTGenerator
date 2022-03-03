@@ -72,6 +72,7 @@ I am a web developer for the Cryptocurrency project Nexus. In late 2021 I got in
   - `$nft_ratio['h']` & `$nft_ratio['w']` : enter the dimensions of what you want the FINAL NFT created to have, once all of the layers are combined.
   - `$marketplace` : Choose one of the available marketplace metadata standards (`TrustMarket` or `Isengard`) listed in the config file to generate the correctly formatted metadata.
   - `$nft_description` : The description you want listed for all of your NFTs.
+  - `$individual_metadata` : An option to create metadata files for each individual NFT in addition to the complete metadata.json file.
   - `$nft_tags` : If you are using Isengard, specify the tags you want the NFTs to have (On TrustMarket you enter them manually during upload)
   - `$collection_name` : If you are using Isengard, specify the Collection name you are creating (On TrustMarket you enter it manually during collection creation)
   -`$make_transparent_BG` : A **true** or **false** (lowercase) option of if you would like to create a duplicate NFT ***without*** the background layer, making it a transparent PNG.

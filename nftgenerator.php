@@ -95,7 +95,7 @@
 		    $generated_metadata = add_metadata($generated_metadata, $attributes, $current_nft, $marketplace, $nft_description, $nft_tags);
         
         if($individual_metadata) {
-          file_put_contents("./Metadata/$current_nft.json", json_encode($generated_metadata, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+          file_put_contents("./Metadata/$current_nft.json", json_encode(array('description'=>$nft_description, 'attributes'=>$attributes), JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
         }
 		  
 		    $current_nft++;
