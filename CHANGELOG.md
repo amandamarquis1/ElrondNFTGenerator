@@ -1,6 +1,10 @@
 # Changelog
 This will be an informal change log to document features worked on at each update.
 
+## [2.1.0] 2022-03-03
+- Added:
+	- Option for individual metadata files to be generated.
+
 ## [2.0.0] 2022-02-25
 - Added:
 	- Subfolder parsing for nested folders to organize batches

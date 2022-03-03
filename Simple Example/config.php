@@ -8,6 +8,9 @@
   $marketplace = 'TrustMarket';
   $nft_description = 'Here is an NFT description!';
   
+  /* Do you want individual metadata files for each NFT */
+  $individual_metadata = true;
+  
   /* Layer combinations for each batch of NFTs */
   $variation_layers = [array('Background', 'Stripes', 'Letter'), array('Background', 'Number', 'Letter')];
   

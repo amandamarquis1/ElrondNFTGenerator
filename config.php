@@ -11,6 +11,9 @@
   /* Number of NFTs in each batch */
   $variation_nfts = [1];
   
+  /* Do you want individual metadata files for each NFT */
+  $individual_metadata = true;
+  
   /* Marketplace Metadata standards available: TrustMarket and IsengardMarket */
   $marketplace = 'TrustMarket';
   $nft_description = '';

@@ -37,6 +37,7 @@
   /* Verify there are enough layer combinations to make NFTS TODO: Update Max NFT again */
   $current_nft = 1;  
   mkdir('NFTGenerator');
+  mkdir('Metadata');
   if($make_transparent_BG) {		
     mkdir($duplicate_nft_folder);
   }
@@ -92,6 +93,10 @@
         array_push($generated_nfts, $attributes);
           
 		    $generated_metadata = add_metadata($generated_metadata, $attributes, $current_nft, $marketplace, $nft_description, $nft_tags);
+        
+        if($individual_metadata) {
+          file_put_contents("./Metadata/$current_nft.json", json_encode($generated_metadata, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+        }
 		  
 		    $current_nft++;
 		
@@ -105,7 +110,7 @@
 	}
 
   /* Write Metadata to json file */
-  mkdir('Metadata');
+  
   if($marketplace === 'TrustMarket') {
 	  file_put_contents('./Metadata/metadata.json', json_encode($generated_metadata, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
 	} else if ($marketplace === 'Isengard') {
