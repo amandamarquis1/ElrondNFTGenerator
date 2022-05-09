@@ -1,6 +1,10 @@
 # Changelog
 This will be an informal change log to document features worked on at each update.
 
+## [2.1.1] 2022-5-09
+- Added:
+	- .gitignore
+  - rearranged some of the script in nftgenerator.php
 ## [2.1.0] 2022-03-03
 - Added:
 	- Option for individual metadata files to be generated.
