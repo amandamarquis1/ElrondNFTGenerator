@@ -2,9 +2,6 @@
 
   require_once('./config.php');
   $location = getcwd();
-  
-  /* Total NFTs in all batches */
-  $total_nfts = array_sum($variation_nfts);
 
   /* Get all of the layer folders */
   $folders = getDirContents($location, getcwd());
@@ -31,8 +28,6 @@
   /* Arrays to store the generated NFTs and their metadata to ensure no duplicates and count appearances*/
   $generated_nfts = array();
   $generated_metadata = array();
-  $collectRarity = array();
-  $collectFolders = array();
   
   /* Verify there are enough layer combinations to make NFTS TODO: Update Max NFT again */
   $current_nft = 1;  
@@ -72,17 +67,6 @@
 
 	    /* Make sure the current generated NFT doesn't already exist */
       if(!in_array($attributes, $generated_nfts)) {
-			
-		    /* Track the frequency of the layer */
-		    foreach ($attributes as $key => $val) {
-          if (isset($collectRarity[$val['value']]))
-            $collectRarity[$val['value']] += 1;
-          else {
-            $collectRarity[$val['value']] = 1;
-            $collectFolders[$val['value']] = $val['trait_type'];
-		      }
-        }
-
 		    build_nft($nft_layers, $nft_ratio, 'NFTGenerator', $current_nft);
 		  
 		    /* Create a background-less duplicate for a transparent copy if desired */
@@ -99,7 +83,7 @@
         }
 		  
 		    $current_nft++;
-		
+		    $nft_layers = null;
 	      /* If NFT combo already exists, don't count this loop and try again */
       } else {
 	      $nft_in_batch--;
@@ -108,38 +92,14 @@
 		  $nft_in_batch++;
     }
 	}
-
-  /* Write Metadata to json file */
   
+  /* Write Metadata to json file */
   if($marketplace === 'TrustMarket') {
 	  file_put_contents('./Metadata/metadata.json', json_encode($generated_metadata, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
 	} else if ($marketplace === 'Isengard') {
 	  file_put_contents('./Metadata/metadata.json', json_encode(array("name"=>$collection_name, "nfts"=>$generated_metadata), JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
 	}
   
-
-  /* Write layer frequency information to a csv file */
-  $frequency_to_csv = fopen('./Metadata/rarities.csv', 'w');
-  fputcsv($frequency_to_csv, array('Category', 'Layer', 'Count', 'Frequency'));
-  foreach($collectRarity as $field => $val) {
-    fputcsv($frequency_to_csv, Array($collectFolders[$field], $field , $val, number_format(($val / $total_nfts) * 100, 2).'%'));
-  }
-
-  /* Zip NFTs and metadata in folder */
-  $zip = new ZipArchive;
-  if($zip -> open('NFTGenerator.zip', ZipArchive::CREATE ) === TRUE) {
-    $dir = opendir('NFTGenerator/');
-    while($file = readdir($dir)) {
-      if(is_file('NFTGenerator/'.$file)) {
-       $zip -> addFile('NFTGenerator/'.$file, $file);
-     }
-    }
-    $zip ->close();
-  }
-  
-  /* Remove unzipped folder & files */
-  array_map('unlink', glob('NFTGenerator/*.*'));
-  rmdir('NFTGenerator');
   
   function add_metadata($generated_metadata, $attributes, $current_nft, $marketplace, $nft_description, $nft_tags) {
 	  if($marketplace === 'TrustMarket') {
@@ -199,5 +159,23 @@
         return $key;
       }
     }
+  
   }
+  
+  function noRepeats($attributes, $dont_repeat_word, $dont_repeat_layers, $max_repeats, $current_nft) {
+    $counter = 0;
+    foreach($attributes as $trait => $values) {
+        if(in_array($values['trait_type'], $dont_repeat_layers) && str_contains($values['value'], $dont_repeat_word)) {
+          $counter++;
+        }          
+    }
+    if ($counter == count($dont_repeat_layers) && $current_nft > $max_repeats) {
+      file_put_contents("./Metadata/$current_nft.json", json_encode($attributes, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+      return false;
+    }
+    else
+      return true;
+  }
+
 ?>
+

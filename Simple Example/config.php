@@ -9,13 +9,13 @@
   $nft_description = 'Here is an NFT description!';
   
   /* Do you want individual metadata files for each NFT */
-  $individual_metadata = true;
+  $individual_metadata = false;
   
   /* Layer combinations for each batch of NFTs */
-  $variation_layers = [array('Background', 'Stripes', 'Letter'), array('Background', 'Number', 'Letter')];
+  $variation_layers = [array('Background', 'Stripes', 'Letter'), array('Background', 'Number', 'Letter'), array('Background', 'Stripes', 'Number', 'Letter'), array('Background', 'Letter')];
   
   /* Number of NFTs in each batch */
-  $variation_nfts = [2,2];
+  $variation_nfts = [25, 10, 40, 5];
   
   /* If you are using ISENGARD MARKET, please fill out the NFT tags and collection name values */
   $collection_name = '';

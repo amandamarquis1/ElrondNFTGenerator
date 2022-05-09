@@ -29,16 +29,15 @@ If you would like assistance with generating your Elrond NFT collection to avoid
 - [x] Create a more complicated example with layer rarity
 
 ## About Amanda
-I am a web developer for the Cryptocurrency project Nexus. In late 2021 I got into the NFT space and released collections both on the Elrond and Nexus blockchains. Below is my contact information and other NFT collection details! 
+I am a developer focusing on growing my skills in the blockchain and cryptocurrency space. In late 2021 I got into the NFT space. Below is my contact information and other NFT collection details! 
 
 - NFT
 	- [MandasNFTs.com](https://mandasnfts.com)
 	- [NFT Twitter](https://twitter.com/MandasNFTs)
-	- [My Elrond NFTs listed on Isengard](https://isengard.market/collection/WADDLE-9e36f0)
+	- [MandasPenguins](https://isengard.market/collection/WADDLE-9e36f0)
+	- [ElrondCassettes](https://www.frameit.gg/marketplace/TAPES-3bba60/sale)
 	- [My Email](mailto:mandasnfts@gmail.com)
-- Personal
 	- [Personal Twitter](https://twitter.com/Salamandacm)
-	- [Telegram](https://t.me/Mandacm)
 
 ## Tutorial
 ### 1. Prepping your files
